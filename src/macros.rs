@@ -22,6 +22,6 @@ macro_rules! provide {
         $(
             $crate::__private::provide_unsized::<dyn $trait + Send + Sync>(value.clone());
         )+
-        $crate::__private::provide_sized(::std::sync::Arc::new($value))
+        $crate::__private::provide_sized(value);
     }};
 }
