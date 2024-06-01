@@ -5,7 +5,7 @@ authors = ["Dmitry Belyaev <mail@d-belyaev.ru>"]
 description = "Simple dependency injection for Rust"
 repository = "https://github.com/bingo347/rust-simple-di"
 license = "MIT"
-keywords = ["di", "dependency injection", "injection"]
+keywords = ["di", "dependency-injection", "injection"]
 categories = ["rust-patterns"]
 edition = "2021"
 
