@@ -1,6 +1,14 @@
 [package]
 name = "simple-di"
 version = "0.1.0"
+authors = ["Dmitry Belyaev <mail@d-belyaev.ru>"]
+description = "Simple dipendency injection for Rust"
+repository = "https://github.com/bingo347/rust-simple-di"
+license = "MIT"
+keywords = ["di", "dependency injection", "injection"]
+categories = ["rust-patterns"]
 edition = "2021"
 
 [dependencies]
+dashmap = "5"
+lazy_static = "1"

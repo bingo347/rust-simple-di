@@ -1,14 +1,39 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use std::sync::Arc;
+
+mod container;
+mod macros;
+
+pub fn inject<T: 'static>() -> Arc<T> {
+    inject_optional().expect("Must be provided")
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub fn inject_optional<T: 'static>() -> Option<Arc<T>> {
+    container::get_sized_item()
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+#[doc(hidden)]
+pub mod __private {
+    use std::{any::TypeId, sync::Arc};
+
+    pub fn inject_unsized<T: ?Sized + 'static>() -> Arc<T> {
+        inject_unsized_optional().expect("Must be provided")
+    }
+
+    pub fn inject_unsized_optional<T: ?Sized + 'static>() -> Option<Arc<T>> {
+        crate::container::get_unsized_item()
+    }
+
+    pub fn provide_sized<T: Send + Sync + 'static>(item: Arc<T>) {
+        let previous = crate::container::set_item(TypeId::of::<T>(), item);
+        if let Some(previous) = previous {
+            drop(previous.to_arc_sized::<T>());
+        }
+    }
+
+    pub fn provide_unsized<T: Send + Sync + ?Sized + 'static>(item: Arc<T>) {
+        let previous = crate::container::set_item(TypeId::of::<T>(), item);
+        if let Some(previous) = previous {
+            drop(previous.to_arc_unsized::<T>());
+        }
     }
 }
