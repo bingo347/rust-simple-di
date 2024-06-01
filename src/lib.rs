@@ -3,10 +3,17 @@ use std::sync::Arc;
 mod container;
 mod macros;
 
+/// Inject T instance from the DI container.
+///
+/// # Panics
+/// Panics if the type is not registered in the container.
 pub fn inject<T: 'static>() -> Arc<T> {
     inject_optional().expect("Must be provided")
 }
 
+/// Inject T instance from the DI container.
+///
+/// Returns `None` if the type is not registered in the container.
 pub fn inject_optional<T: 'static>() -> Option<Arc<T>> {
     container::get_sized_item()
 }
