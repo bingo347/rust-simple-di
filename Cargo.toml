@@ -2,7 +2,7 @@
 name = "simple-di"
 version = "0.1.0"
 authors = ["Dmitry Belyaev <mail@d-belyaev.ru>"]
-description = "Simple dipendency injection for Rust"
+description = "Simple dependency injection for Rust"
 repository = "https://github.com/bingo347/rust-simple-di"
 license = "MIT"
 keywords = ["di", "dependency injection", "injection"]
