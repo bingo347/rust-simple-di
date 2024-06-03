@@ -1,6 +1,6 @@
 [package]
 name = "simple-di"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Dmitry Belyaev <mail@d-belyaev.ru>"]
 description = "Simple dependency injection for Rust"
 repository = "https://github.com/bingo347/rust-simple-di"
