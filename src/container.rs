@@ -8,12 +8,12 @@ lazy_static! {
 
 pub(crate) fn get_sized_item<T: 'static>() -> Option<Arc<T>> {
     let item = SHARED_CONTAINER.get(&TypeId::of::<T>())?;
-    Some(item.to_arc_sized())
+    Some(item.to_arc_sized(true))
 }
 
 pub(crate) fn get_unsized_item<T: ?Sized + 'static>() -> Option<Arc<T>> {
     let item = SHARED_CONTAINER.get(&TypeId::of::<T>())?;
-    Some(item.to_arc_unsized())
+    Some(item.to_arc_unsized(true))
 }
 
 pub(crate) fn set_item(id: TypeId, item: impl Into<ItemPtr>) -> Option<ItemPtr> {
@@ -57,20 +57,24 @@ impl<T: ?Sized> From<Arc<T>> for ItemPtr {
 }
 
 impl ItemPtr {
-    pub(crate) fn to_arc_unsized<T: ?Sized>(self) -> Arc<T> {
+    pub(crate) fn to_arc_unsized<T: ?Sized>(self, need_increment: bool) -> Arc<T> {
         let t_ptr_size = mem::size_of::<*const T>();
         assert_eq!(t_ptr_size, FAT_PTR_SIZE);
         let wrapper = ItemPtrWrapper { item: self };
         unsafe {
-            Arc::<T>::increment_strong_count(wrapper.raw);
+            if need_increment {
+                Arc::<T>::increment_strong_count(wrapper.raw);
+            }
             Arc::<T>::from_raw(wrapper.raw)
         }
     }
 
-    pub(crate) fn to_arc_sized<T>(self) -> Arc<T> {
+    pub(crate) fn to_arc_sized<T>(self, need_increment: bool) -> Arc<T> {
         assert!(self.v_table.is_null());
         unsafe {
-            Arc::<T>::increment_strong_count(self.data as _);
+            if need_increment {
+                Arc::<T>::increment_strong_count(self.data as _);
+            }
             Arc::<T>::from_raw(self.data as _)
         }
     }

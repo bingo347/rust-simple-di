@@ -33,14 +33,14 @@ pub mod __private {
     pub fn provide_sized<T: Send + Sync + 'static>(item: Arc<T>) {
         let previous = crate::container::set_item(TypeId::of::<T>(), item);
         if let Some(previous) = previous {
-            drop(previous.to_arc_sized::<T>());
+            drop(previous.to_arc_sized::<T>(false));
         }
     }
 
     pub fn provide_unsized<T: Send + Sync + ?Sized + 'static>(item: Arc<T>) {
         let previous = crate::container::set_item(TypeId::of::<T>(), item);
         if let Some(previous) = previous {
-            drop(previous.to_arc_unsized::<T>());
+            drop(previous.to_arc_unsized::<T>(false));
         }
     }
 }
